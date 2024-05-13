@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { TanstackProvider } from "@/providers/TanstackProvider";
+import { Toaster } from "@/components/ui/sonner";
+import { DynamicLayout } from "@/components/dynamic-layout";
+import { SocketProvider } from "@/providers/SocketProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +20,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <SocketProvider>
+          <TanstackProvider>
+            <Toaster />
+            <DynamicLayout navCollapsedSize={0}>{children}</DynamicLayout>
+          </TanstackProvider>
+        </SocketProvider>
+      </body>
     </html>
   );
 }

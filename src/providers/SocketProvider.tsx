@@ -9,7 +9,7 @@ import {
 } from "react";
 import io, { Socket } from "socket.io-client";
 
-const SOCKET_SERVER = process.env.NEXT_PUBLIC_SOCKET_URL;
+const SOCKET_SERVER = process.env.NEXT_PUBLIC_SOCKET_URL as string;
 type SocketContextType = Socket | undefined;
 const SocketContext = createContext<SocketContextType>(undefined);
 
@@ -24,7 +24,7 @@ export const SocketProvider = ({ children }: SocketProviderProps) => {
 
   useEffect(() => {
     const initializeSocket = () => {
-      const newSocket = io(SOCKET_SERVER, {
+      const newSocket = io(SOCKET_SERVER!, {
         transports: ["websocket"],
       });
 

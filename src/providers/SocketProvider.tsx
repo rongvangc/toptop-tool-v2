@@ -28,8 +28,6 @@ export const SocketProvider = ({ children }: SocketProviderProps) => {
         transports: ["websocket"],
       });
 
-      console.log(newSocket);
-
       return newSocket;
     };
 

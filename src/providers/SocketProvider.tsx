@@ -9,7 +9,7 @@ import {
 } from "react";
 import io, { Socket } from "socket.io-client";
 
-const SOCKET_SERVER = "http://localhost:4000";
+const SOCKET_SERVER = process.env.NEXT_PUBLIC_SOCKET_URL;
 type SocketContextType = Socket | undefined;
 const SocketContext = createContext<SocketContextType>(undefined);
 

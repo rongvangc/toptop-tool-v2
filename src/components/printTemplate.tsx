@@ -10,7 +10,7 @@ const PrintTemplate: ForwardRefRenderFunction<
   return (
     <div ref={ref} className="p-2">
       <ul className="text-lg">
-        <li>
+        <li className="text-5xl">
           STT: <span className="font-bold">{data?.currentOrderNumber}</span>
         </li>
         <li>

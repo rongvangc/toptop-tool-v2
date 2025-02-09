@@ -11,6 +11,9 @@ const PrintTemplate: ForwardRefRenderFunction<
     <div ref={ref} className="p-2">
       <ul className="text-lg">
         <li>
+          STT: <span className="font-bold">{data?.currentOrderNumber}</span>
+        </li>
+        <li>
           ID number: <span className="font-bold">{data?.userId}</span>
         </li>
         <li>

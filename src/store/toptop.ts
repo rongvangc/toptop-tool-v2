@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 interface ToptopState {
   printData: CommentTopTopData | null;
-  setPrintData: (data:CommentTopTopData | null) => void
+  setPrintData: (data: CommentTopTopData | null) => void;
 }
 
 const useToptopStore = create<ToptopState>((set, get) => ({
@@ -10,7 +10,7 @@ const useToptopStore = create<ToptopState>((set, get) => ({
   setPrintData: (data) => {
     set((state) => ({
       ...state,
-      printData:data,
+      printData: data,
     }));
   },
 }));

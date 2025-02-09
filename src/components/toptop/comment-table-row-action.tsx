@@ -9,18 +9,23 @@ import { useCallback } from "react";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
+  currentOrderNumber: number;
 }
 
 export function DataTableRowActions<TData>({
   row,
+  currentOrderNumber,
 }: DataTableRowActionsProps<TData>) {
   const customer = row.original;
 
   const { setPrintData } = useToptopStore();
 
   const handlePrintData = useCallback(() => {
-    setPrintData(customer as CommentTopTopData);
-  }, [customer, setPrintData]);
+    setPrintData({
+      ...customer,
+      currentOrderNumber,
+    } as unknown as CommentTopTopData);
+  }, [currentOrderNumber, customer, setPrintData]);
 
   return (
     <Button variant="ghost" onClick={handlePrintData}>

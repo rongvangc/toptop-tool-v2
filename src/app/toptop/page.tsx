@@ -14,6 +14,7 @@ const ToptopPage = () => {
   const socket = useSocket();
 
   const [userId, setUserId] = useState<string>("");
+  const [currentOrderNumber, setCurrentOrderNumber] = useState<number>(1);
   const [isConnected, setIsConnected] = useState(socket?.connected);
   const [comments, setComments] = useState<CommentTopTopData[]>([]);
   const [inprocess, setInprocess] = useState<boolean>(false);
@@ -22,9 +23,10 @@ const ToptopPage = () => {
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
-    documentTitle: "Đơn hàng",
+    documentTitle: `Đơn hàng ${printData?.currentOrderNumber}`,
     onAfterPrint: () => {
       console.log("In đơn hàng thành công");
+      setCurrentOrderNumber((prev) => prev + 1);
       setPrintData(null);
     },
     onPrintError: () => {
@@ -136,7 +138,7 @@ const ToptopPage = () => {
           {!!comments?.length && (
             <CommentToptopTable
               data={comments}
-              columns={commmentToptopColumns}
+              columns={commmentToptopColumns(currentOrderNumber)}
             />
           )}
           <div className="hidden">

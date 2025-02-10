@@ -9,23 +9,42 @@ import { useCallback } from "react";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
-  currentOrderNumber: number;
 }
 
 export function DataTableRowActions<TData>({
   row,
-  currentOrderNumber,
 }: DataTableRowActionsProps<TData>) {
-  const customer = row.original;
+  const customer = row.original as any;
 
   const { setPrintData } = useToptopStore();
 
   const handlePrintData = useCallback(() => {
-    setPrintData({
-      ...customer,
-      currentOrderNumber,
-    } as unknown as CommentTopTopData);
-  }, [currentOrderNumber, customer, setPrintData]);
+    const currentOrder = localStorage.getItem("orderList");
+    const parsedOrder = currentOrder ? JSON.parse(currentOrder) : {};
+    const orderLength = Object.keys(parsedOrder).length;
+
+    if (customer?.userId && customer?.userId in parsedOrder) {
+      setPrintData({
+        ...customer,
+        currentOrderNumber: parsedOrder[customer?.userId],
+      } as unknown as CommentTopTopData);
+    } else {
+      localStorage.setItem(
+        "orderList",
+        JSON.stringify({
+          ...parsedOrder,
+          [customer?.userId as string]: orderLength + 1,
+        })
+      );
+      setPrintData({
+        ...customer,
+        currentOrderNumber:
+          customer?.userId && customer?.userId in parsedOrder
+            ? parsedOrder[customer?.userId]
+            : orderLength + 1,
+      } as unknown as CommentTopTopData);
+    }
+  }, [customer, setPrintData]);
 
   return (
     <Button variant="ghost" onClick={handlePrintData}>

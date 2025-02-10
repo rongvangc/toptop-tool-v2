@@ -14,19 +14,17 @@ const ToptopPage = () => {
   const socket = useSocket();
 
   const [userId, setUserId] = useState<string>("");
-  const [currentOrderNumber, setCurrentOrderNumber] = useState<number>(1);
   const [isConnected, setIsConnected] = useState(socket?.connected);
   const [comments, setComments] = useState<CommentTopTopData[]>([]);
   const [inprocess, setInprocess] = useState<boolean>(false);
   const componentRef = useRef<HTMLDivElement>(null);
-  const { printData, setPrintData } = useToptopStore();
+  const { printData, setPrintData, setCurrentOrderNumber } = useToptopStore();
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     documentTitle: `Đơn hàng ${printData?.currentOrderNumber}`,
     onAfterPrint: () => {
       console.log("In đơn hàng thành công");
-      setCurrentOrderNumber((prev) => prev + 1);
       setPrintData(null);
     },
     onPrintError: () => {
@@ -41,17 +39,21 @@ const ToptopPage = () => {
     socket?.emit("chat-tiktok", userId);
     localStorage.setItem("userId", userId);
     localStorage.setItem("comments", JSON.stringify([]));
+    localStorage.setItem("orderList", JSON.stringify({}));
   }, [userId, socket]);
 
   const handleCloseComment = useCallback(() => {
     socket?.emit("close-tiktok");
     localStorage.setItem("userId", "");
     localStorage.setItem("comments", JSON.stringify([]));
+    localStorage.setItem("orderList", JSON.stringify({}));
   }, [socket]);
 
   useEffect(() => {
-    printData?.userId && handlePrint();
-  }, [printData, handlePrint]);
+    if (printData?.userId) {
+      handlePrint();
+    }
+  }, [printData?.userId, handlePrint]);
 
   useEffect(() => {
     if (!socket) return;
@@ -138,7 +140,7 @@ const ToptopPage = () => {
           {!!comments?.length && (
             <CommentToptopTable
               data={comments}
-              columns={commmentToptopColumns(currentOrderNumber)}
+              columns={commmentToptopColumns}
             />
           )}
           <div className="hidden">
